@@ -1,1 +1,6 @@
-# software-foundations-lean
+software-foundations-lean
+========
+
+```bash
+lake build
+```

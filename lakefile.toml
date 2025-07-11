@@ -1,6 +1,9 @@
 name = "software-foundations-lean"
 version = "0.1.0"
-defaultTargets = ["SoftwareFoundationsLean"]
+defaultTargets = ["SoftwareFoundationsVol1", "SoftwareFoundationsVol2"]
 
 [[lean_lib]]
-name = "SoftwareFoundationsLean"
+name = "SoftwareFoundationsVol1"
+
+[[lean_lib]]
+name = "SoftwareFoundationsVol2"
