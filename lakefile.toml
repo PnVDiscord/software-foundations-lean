@@ -1,0 +1,6 @@
+name = "software-foundations-lean"
+version = "0.1.0"
+defaultTargets = ["SoftwareFoundationsLean"]
+
+[[lean_lib]]
+name = "SoftwareFoundationsLean"
