@@ -23,7 +23,7 @@ def next_working_day (day : Day) : Day :=
 #eval next_working_day Day.friday -- Day.monday
 #eval next_working_day (next_working_day Day.saturday) -- Day.tuesday
 
-example : next_working_day (next_working_day Day.saturday) = Day.tuesday := by rfl
+example : next_working_day (next_working_day Day.saturday) = Day.tuesday := rfl
 
 -- ## Booleans
 -- NOTE: Unlike in Coq, Lean4 does have a built-in `Bool` type. So we will
@@ -37,25 +37,25 @@ def negb (b : MyBool) : MyBool :=
   | MyBool.true => MyBool.false
   | MyBool.false => MyBool.true
 
-def andb (b1 b2 : MyBool) : MyBool :=
+def andb (b1 : MyBool) (b2 : MyBool) : MyBool :=
   match b1 with
   | MyBool.true => b2
   | MyBool.false => MyBool.false
 
-def orb (b1 b2 : MyBool) : MyBool :=
+def orb (b1 : MyBool) (b2 : MyBool) : MyBool :=
   match b1 with
   | MyBool.true => MyBool.true
   | MyBool.false => b2
 
-example : orb MyBool.true MyBool.false = MyBool.true := by rfl
-example : orb MyBool.false MyBool.false = MyBool.false := by rfl
-example : orb MyBool.false MyBool.true = MyBool.true := by rfl
-example : orb MyBool.true MyBool.true = MyBool.true := by rfl
+example : orb MyBool.true MyBool.false = MyBool.true := rfl
+example : orb MyBool.false MyBool.false = MyBool.false := rfl
+example : orb MyBool.false MyBool.true = MyBool.true := rfl
+example : orb MyBool.true MyBool.true = MyBool.true := rfl
 
 infixl:60 " my&& " => andb
 infixl:55 " my|| " => orb
 
-example : MyBool.false my|| MyBool.false my|| MyBool.true = MyBool.true := by rfl
+example : MyBool.false my|| MyBool.false my|| MyBool.true = MyBool.true := rfl
 
 -- Unlike in Coq, Lean4 does not treat first clause constructors as a truthy
 -- value. So we need to define our own coercion from `MyBool` to `Bool` to
@@ -74,11 +74,11 @@ def negb' (b : MyBool) : MyBool :=
   then MyBool.false
   else MyBool.true
 
-def andb' (b1 b2 : MyBool) : MyBool :=
+def andb' (b1 : MyBool) (b2 : MyBool) : MyBool :=
   if b1 then b2
   else MyBool.false
 
-def orb' (b1 b2 : MyBool) : MyBool :=
+def orb' (b1 : MyBool) (b2 : MyBool) : MyBool :=
   if b1 then MyBool.true
   else b2
 
@@ -99,39 +99,217 @@ def invert (x: BW) : BW :=
 -- ### Exercise: 1 star, standard (nandb)
 -- TODO: Replace `sorry` with your definition.
 def nandb (b1 b2 : MyBool) : MyBool :=
-  /- REPLACE THIS LINE WITH YOUR DEFINITION " -/ by sorry
+  /- REPLACE THIS LINE WITH YOUR DEFINITION -/ sorry
 example : (nandb MyBool.true MyBool.false) = true :=
-  /- FILL IN HERE -/ by sorry
+  /- FILL IN HERE -/ sorry
 example : (nandb MyBool.false MyBool.false) = true :=
-  /- FILL IN HERE -/ by sorry
+  /- FILL IN HERE -/ sorry
 example : (nandb MyBool.false MyBool.true) = true :=
-  /- FILL IN HERE -/ by sorry
+  /- FILL IN HERE -/ sorry
 example : (nandb MyBool.true MyBool.true) = false :=
-  /- FILL IN HERE -/ by sorry
+  /- FILL IN HERE -/ sorry
 
 -- ### Exercise: 1 star, standard (andb3)
 def andb3 (b1 b2 b3 : MyBool) : MyBool :=
-  /- REPLACE THIS LINE WITH YOUR DEFINITION " -/ by sorry
+  /- REPLACE THIS LINE WITH YOUR DEFINITION -/ sorry
 example : andb3 MyBool.true MyBool.true MyBool.true = MyBool.true :=
-  /- FILL IN HERE -/ by sorry
+  /- FILL IN HERE -/ sorry
 example : andb3 MyBool.false MyBool.true MyBool.true = MyBool.false :=
-  /- FILL IN HERE -/ by sorry
+  /- FILL IN HERE -/ sorry
 example : andb3 MyBool.true MyBool.false MyBool.true = MyBool.false :=
-  /- FILL IN HERE -/ by sorry
+  /- FILL IN HERE -/ sorry
 example : andb3 MyBool.true MyBool.true MyBool.false = MyBool.false :=
-  /- FILL IN HERE -/ by sorry
+  /- FILL IN HERE -/ sorry
+
+-- NOTE: We'll use lean's built-in `Bool` instead of `MyBool`
+-- for the rest of the file.
 
 -- ## Types
-#check MyBool.true -- MyBool.true : MyBool
-#check negb MyBool.true -- negb MyBool.true : MyBool
-#check negb -- negb (b : MyBool) : MyBool
+#check true -- Bool.true : Bool
+
+#check (true : Bool)
+#check (not true : Bool)
+#check (not : Bool → Bool)
 
 -- ## New Types from Old
-inductive rgb : Type where
+inductive RGB : Type where
   | red
   | green
   | blue
-inductive color : Type where
+inductive Color : Type where
   | black
   | white
-  | primary (p : rgb)
+  | primary (p : RGB)
+
+def monochrome (c : Color) : Bool :=
+  match c with
+  | Color.black => true
+  | Color.white => true
+  | Color.primary _ => false
+
+def isred (c : Color) : Bool :=
+  match c with
+  | Color.black => false
+  | Color.white => false
+  | Color.primary RGB.red => true
+  | Color.primary _ => false
+
+-- ## Modules
+-- In Lean, we use `namespace` to achieve a similar effect to Coq's `Module`.
+namespace Playground
+  def foo : RGB := RGB.blue
+end Playground
+
+def foo : Bool := true
+
+#check (Playground.foo : RGB)
+#check (foo : Bool)
+
+-- ## Tuples
+namespace TuplePlayground
+  inductive Bit : Type where
+    | b1
+    | b0
+  inductive Nybble : Type where
+    | bits (b0 b1 b2 b3 : Bit)
+
+  #check (Nybble.bits Bit.b1 Bit.b0 Bit.b1 Bit.b0 : Nybble)
+
+  def all_zero (nb : Nybble) : Bool :=
+    match nb with
+    | Nybble.bits Bit.b0 Bit.b0 Bit.b0 Bit.b0 => true
+    | Nybble.bits _ _ _ _ => false
+
+  #eval all_zero (Nybble.bits Bit.b1 Bit.b0 Bit.b1 Bit.b0) -- false
+  #eval all_zero (Nybble.bits Bit.b0 Bit.b0 Bit.b0 Bit.b0) -- true
+end TuplePlayground
+
+-- ## Numbers
+-- NOTE: Lean has a built-in `Nat` type. We will define `NatPlayground.Nat` to
+-- follow the book's spirit of building everything from scratch.
+namespace NatPlayground
+  inductive Nat : Type where
+    | zero
+    | succ (n : Nat)
+
+  inductive OtherNat : Type where
+    | stop
+    | tick (n : OtherNat)
+
+  def pred (n : Nat) : Nat :=
+    match n with
+    | Nat.zero => Nat.zero
+    | Nat.succ n' => n'
+end NatPlayground
+
+#check Nat.succ (Nat.succ (Nat.succ (Nat.succ Nat.zero))) -- Nat.zero.succ.succ.succ.succ : Nat
+-- NOTE: Lean treats `n.succ` as a `Nat.succ n`
+#check Nat.zero.succ.succ.succ.succ -- Nat.zero.succ.succ.succ.succ : Nat
+
+def minustwo (n : Nat) : Nat :=
+  match n with
+  | Nat.zero => Nat.zero
+  | Nat.succ Nat.zero => Nat.zero
+  | Nat.succ (Nat.succ n') => n'
+
+#eval minustwo 4 -- 2
+
+#check (Nat.succ : Nat → Nat)
+#check (Nat.pred : Nat → Nat)
+#check (minustwo : Nat → Nat)
+
+def even (n : Nat) : Bool :=
+  match n with
+  | Nat.zero => true
+  | Nat.succ Nat.zero => false
+  | Nat.succ (Nat.succ n') => even n'
+
+def odd (n : Nat) : Bool :=
+  not (even n)
+
+example : odd 1 = true := rfl
+example : odd 4 = false := rfl
+
+namespace NatPlayground2
+  def plus (n : Nat) (m : Nat) : Nat :=
+    match n with
+    | Nat.zero => m
+    | Nat.succ n' => Nat.succ (plus n' m)
+
+  #eval plus 3 2 -- 5
+
+  def mult (n m : Nat) : Nat :=
+    match n with
+    | Nat.zero => Nat.zero
+    | Nat.succ n' => plus m (mult n' m)
+
+  example : mult 3 3 = 9 := rfl
+
+  def minus (n m : Nat) : Nat :=
+    match n, m with
+    | Nat.zero, _ => Nat.zero
+    | Nat.succ _, Nat.zero => n
+    | Nat.succ n', Nat.succ m' => minus n' m'
+end NatPlayground2
+
+def exp (base power : Nat) : Nat :=
+  match power with
+  | Nat.zero => Nat.succ Nat.zero
+  | Nat.succ p => Nat.mul base (exp base p)
+
+-- ### Exercise: 1 star, standard (factorial)
+def factorial (n : Nat) : Nat :=
+  /- REPLACE THIS LINE WITH YOUR DEFINITION -/ sorry
+example : factorial 3 = 6 :=
+  /- FILL IN HERE -/ sorry
+example : factorial 5 = Nat.mul 10 12 :=
+  /- FILL IN HERE -/ sorry
+
+infixl:65 " my+ " => Nat.add
+infixl:65 " my- " => Nat.sub
+infixl:70 " my* " => Nat.mul
+
+#check (((0 my+ 1) my+ 1) : Nat)
+
+def eqb (n m : Nat) : Bool :=
+  match n with
+  | Nat.zero =>
+    match m with
+    | Nat.zero => true
+    | Nat.succ _ => false
+  | Nat.succ n' =>
+    match m with
+    | Nat.zero => false
+    | Nat.succ m' => eqb n' m'
+
+def leb (n m : Nat) : Bool :=
+  match n with
+  | Nat.zero => true
+  | Nat.succ n' =>
+    match m with
+    | Nat.zero => false
+    | Nat.succ m' => leb n' m'
+
+example : leb 2 2 = true := rfl
+example : leb 2 4 = true := rfl
+example : leb 4 2 = false := rfl
+
+infix:50 " =? " => eqb
+infix:50 " <=? " => leb
+
+example : (4 <=? 2) = false := rfl
+
+-- ### Exercise: 1 star, standard (ltb)
+def ltb (n m : Nat) : Bool :=
+  /- REPLACE THIS LINE WITH YOUR DEFINITION -/ sorry
+
+infix:50 " <? " => ltb
+
+example : ltb 2 2 = false :=
+  /- FILL IN HERE -/ sorry
+example : ltb 2 4 = true :=
+  /- FILL IN HERE -/ sorry
+example : ltb 4 2 = false :=
+  /- FILL IN HERE -/ sorry
+
+-- # Proof by Simplification
