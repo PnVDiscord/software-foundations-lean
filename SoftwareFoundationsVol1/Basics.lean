@@ -357,3 +357,75 @@ theorem mul_one : ∀ p : Nat, p * 1 = p := by
   /- FILL IN HERE -/ sorry
 
 -- # Proof by Case Analysis
+theorem add_one_neq_zero_firsttry : ∀ n : Nat, (n + 1 =? 0) = false := by
+  intro n
+  -- simp: does nothing!
+  sorry
+
+theorem add_one_neq_zero : ∀ n : Nat, (n + 1 =? 0) = false := by
+  intro n
+  cases n
+  rfl
+  rfl
+
+theorem not_involutive : ∀ b : Bool, not (not b) = b := by
+  intro b
+  cases b
+  . rfl
+  . rfl
+
+theorem and_commutative : ∀ b c : Bool, and b c = and c b := by
+  intro b c
+  cases b
+  . cases c
+    . rfl
+    . rfl
+  . cases c
+    . rfl
+    . rfl
+
+theorem and_commutative' : ∀ b c : Bool, and b c = and c b := by
+  intro b c
+  cases b with
+  | true => cases c with
+    | true => rfl
+    | false => rfl
+  | false => cases c with
+    | true => rfl
+    | false => rfl
+
+theorem and_commutative''' : ∀ b c : Bool, and b c = and c b := by
+  intro b c
+  cases b <;> cases c <;> rfl
+
+theorem and3_exchange : ∀ b c d : Bool, and (and b c) d = and (and b d) c := by
+  intro b c d
+  cases b
+  . cases c
+    . cases d
+      . rfl
+      . rfl
+    . cases d
+      . rfl
+      . rfl
+  . cases c
+    . cases d
+      . rfl
+      . rfl
+    . cases d
+      . rfl
+      . rfl
+
+theorem and3_exchange' : ∀ b c d : Bool, and (and b c) d = and (and b d) c := by
+  intro b c d
+  cases b <;> cases c <;> cases d <;> rfl
+
+-- ### Exercise: 2 stars, standard (andb_true_elim2)
+theorem and_true_elim2 : ∀ b c : Bool, and b c = true → c = true := by
+  /- FILL IN HERE -/ sorry
+
+-- ### Exercise: 1 star, standard (zero_nbeq_plus_1)
+theorem zero_nbeq_add_one : ∀ n : Nat, 0 =? n + 1 = false := by
+  /- FILL IN HERE -/ sorry
+
+-- # More Exercises
