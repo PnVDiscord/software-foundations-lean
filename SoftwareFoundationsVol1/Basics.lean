@@ -313,3 +313,47 @@ example : ltb 4 2 = false :=
   /- FILL IN HERE -/ sorry
 
 -- # Proof by Simplification
+theorem zero_add : ∀ n : Nat, 0 + n = n := by
+  intro n
+  simp
+
+theorem zero_add'': ∀ n : Nat, 0 + n = n := by
+  intro m
+  simp
+
+theorem add_one : ∀ n : Nat, n + 1 = Nat.succ n := by
+  intro n
+  simp
+
+theorem zero_mul : ∀ n : Nat, 0 * n = 0 := by
+  intros n
+  simp
+
+-- # Proof by Rewriting
+theorem plus_id_example : ∀ n m : Nat, n = m → n + n = m + m := by
+  -- move both quantifiers into the context
+  intro n m
+  -- move the hypothesis into the context
+  intro h
+  -- rewrite the goal using the hypothesis
+  rewrite [h]
+  rfl
+
+-- ### Exercise: 1 star, standard (plus_id_exercise)
+theorem plus_id_exercise : ∀ n m o : Nat, n = m → m = o → n + m = m + o := by
+  /- FILL IN HERE -/ sorry
+
+#check Nat.mul_zero -- Nat.mul_zero (n : Nat) : n * 0 = 0
+#check Nat.mul_succ -- Nat.mul_succ (n m : Nat) : n * m.succ = n * m + n
+
+theorem mul_zero_add_mul_zero_eq_zero : ∀ p q : Nat, (p * 0) + (q * 0) = 0 := by
+  intro p q
+  rewrite [Nat.mul_zero]
+  rewrite [Nat.mul_zero]
+  rfl
+
+-- ### Exercise: 1 star, standard (mult_n_1)
+theorem mul_one : ∀ p : Nat, p * 1 = p := by
+  /- FILL IN HERE -/ sorry
+
+-- # Proof by Case Analysis
