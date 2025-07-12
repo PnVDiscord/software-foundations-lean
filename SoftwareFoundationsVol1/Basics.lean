@@ -12,18 +12,30 @@ inductive Day : Type where
 
 def next_working_day (day : Day) : Day :=
   match day with
-  | Day.monday => Day.tuesday
-  | Day.tuesday => Day.wednesday
+  | Day.monday    => Day.tuesday
+  | Day.tuesday   => Day.wednesday
   | Day.wednesday => Day.thursday
-  | Day.thursday => Day.friday
-  | Day.friday => Day.monday
-  | Day.saturday => Day.monday
-  | Day.sunday => Day.monday
+  | Day.thursday  => Day.friday
+  | Day.friday    => Day.monday
+  | Day.saturday  => Day.monday
+  | Day.sunday    => Day.monday
 
-#eval next_working_day Day.friday -- Day.monday
-#eval next_working_day (next_working_day Day.saturday) -- Day.tuesday
+-- NOTE: You can skip the name of the type before the constructors
+-- when lean can infer it.
+def next_working_day' (day : Day) : Day :=
+  match day with
+  | .monday    => .tuesday
+  | .tuesday   => .wednesday
+  | .wednesday => .thursday
+  | .thursday  => .friday
+  | .friday    => .monday
+  | .saturday  => .monday
+  | .sunday    => .monday
 
-example : next_working_day (next_working_day Day.saturday) = Day.tuesday := rfl
+#eval next_working_day .friday -- Day.monday
+#eval next_working_day (next_working_day .saturday) -- Day.tuesday
+
+example : next_working_day (next_working_day .saturday) = .tuesday := rfl
 
 -- ## Booleans
 -- NOTE: Unlike in Coq, Lean4 does have a built-in `Bool` type. So we will
@@ -34,28 +46,28 @@ inductive MyBool : Type where
 
 def negb (b : MyBool) : MyBool :=
   match b with
-  | MyBool.true => MyBool.false
-  | MyBool.false => MyBool.true
+  | .true => .false
+  | .false => .true
 
 def andb (b1 : MyBool) (b2 : MyBool) : MyBool :=
   match b1 with
-  | MyBool.true => b2
-  | MyBool.false => MyBool.false
+  | .true => b2
+  | .false => .false
 
 def orb (b1 : MyBool) (b2 : MyBool) : MyBool :=
   match b1 with
-  | MyBool.true => MyBool.true
-  | MyBool.false => b2
+  | .true => .true
+  | .false => b2
 
-example : orb MyBool.true MyBool.false = MyBool.true := rfl
-example : orb MyBool.false MyBool.false = MyBool.false := rfl
-example : orb MyBool.false MyBool.true = MyBool.true := rfl
-example : orb MyBool.true MyBool.true = MyBool.true := rfl
+example : orb .true  .false = .true := rfl
+example : orb .false .false = .false := rfl
+example : orb .false .true  = .true := rfl
+example : orb .true  .true  = .true := rfl
 
 infixl:60 " my&& " => andb
 infixl:55 " my|| " => orb
 
-example : MyBool.false my|| MyBool.false my|| MyBool.true = MyBool.true := rfl
+example : .false my|| .false my|| .true = .true := rfl
 
 -- Unlike in Coq, Lean4 does not treat first clause constructors as a truthy
 -- value. So we need to define our own coercion from `MyBool` to `Bool` to
@@ -63,23 +75,23 @@ example : MyBool.false my|| MyBool.false my|| MyBool.true = MyBool.true := rfl
 @[coe]
 def MyBool.toBool (b : MyBool) : Bool :=
   match b with
-  | MyBool.true => True
-  | MyBool.false => False
+  | .true => True
+  | .false => False
 -- Typeclass for coercion from `MyBool` to `Bool`. If you don't know what a type
 -- class is, just skip it for now.
 instance : Coe MyBool Bool where coe := MyBool.toBool
 
 def negb' (b : MyBool) : MyBool :=
   if b
-  then MyBool.false
-  else MyBool.true
+  then .false
+  else .true
 
 def andb' (b1 : MyBool) (b2 : MyBool) : MyBool :=
   if b1 then b2
-  else MyBool.false
+  else .false
 
 def orb' (b1 : MyBool) (b2 : MyBool) : MyBool :=
-  if b1 then MyBool.true
+  if b1 then .true
   else b2
 
 inductive BW : Type where
@@ -90,35 +102,35 @@ inductive BW : Type where
 -- let's not abuse the `if` statement as a binary pattern matching.
 def invert (x: BW) : BW :=
   match x with
-  | BW.black => BW.white
-  | BW.white => BW.black
+  | .black => .white
+  | .white => .black
 
-#eval invert BW.black -- BW.white
-#eval invert BW.white -- BW.black
+#eval invert .black -- BW.white
+#eval invert .white -- BW.black
 
 -- ### Exercise: 1 star, standard (nandb)
 -- TODO: Replace `sorry` with your definition.
 def nandb (b1 b2 : MyBool) : MyBool :=
   /- REPLACE THIS LINE WITH YOUR DEFINITION -/ sorry
-example : (nandb MyBool.true MyBool.false) = true :=
+example : (nandb .true .false) = true :=
   /- FILL IN HERE -/ sorry
-example : (nandb MyBool.false MyBool.false) = true :=
+example : (nandb .false .false) = true :=
   /- FILL IN HERE -/ sorry
-example : (nandb MyBool.false MyBool.true) = true :=
+example : (nandb .false .true) = true :=
   /- FILL IN HERE -/ sorry
-example : (nandb MyBool.true MyBool.true) = false :=
+example : (nandb .true .true) = false :=
   /- FILL IN HERE -/ sorry
 
 -- ### Exercise: 1 star, standard (andb3)
 def andb3 (b1 b2 b3 : MyBool) : MyBool :=
   /- REPLACE THIS LINE WITH YOUR DEFINITION -/ sorry
-example : andb3 MyBool.true MyBool.true MyBool.true = MyBool.true :=
+example : andb3 .true .true .true = .true :=
   /- FILL IN HERE -/ sorry
-example : andb3 MyBool.false MyBool.true MyBool.true = MyBool.false :=
+example : andb3 .false .true .true = .false :=
   /- FILL IN HERE -/ sorry
-example : andb3 MyBool.true MyBool.false MyBool.true = MyBool.false :=
+example : andb3 .true .false .true = .false :=
   /- FILL IN HERE -/ sorry
-example : andb3 MyBool.true MyBool.true MyBool.false = MyBool.false :=
+example : andb3 .true .true .false = .false :=
   /- FILL IN HERE -/ sorry
 
 -- NOTE: We'll use lean's built-in `Bool` instead of `MyBool`
@@ -143,21 +155,21 @@ inductive Color : Type where
 
 def monochrome (c : Color) : Bool :=
   match c with
-  | Color.black => true
-  | Color.white => true
-  | Color.primary _ => false
+  | .black => true
+  | .white => true
+  | .primary _ => false
 
 def isred (c : Color) : Bool :=
   match c with
-  | Color.black => false
-  | Color.white => false
-  | Color.primary RGB.red => true
-  | Color.primary _ => false
+  | .black => false
+  | .white => false
+  | .primary .red => true
+  | .primary _ => false
 
 -- ## Modules
 -- In Lean, we use `namespace` to achieve a similar effect to Coq's `Module`.
 namespace Playground
-  def foo : RGB := RGB.blue
+  def foo : RGB := .blue
 end Playground
 
 def foo : Bool := true
@@ -173,15 +185,15 @@ namespace TuplePlayground
   inductive Nybble : Type where
     | bits (b0 b1 b2 b3 : Bit)
 
-  #check (Nybble.bits Bit.b1 Bit.b0 Bit.b1 Bit.b0 : Nybble)
+  #check (Nybble.bits .b1 .b0 .b1 .b0 : Nybble)
 
   def all_zero (nb : Nybble) : Bool :=
     match nb with
-    | Nybble.bits Bit.b0 Bit.b0 Bit.b0 Bit.b0 => true
-    | Nybble.bits _ _ _ _ => false
+    | .bits .b0 .b0 .b0 .b0 => true
+    | .bits _ _ _ _ => false
 
-  #eval all_zero (Nybble.bits Bit.b1 Bit.b0 Bit.b1 Bit.b0) -- false
-  #eval all_zero (Nybble.bits Bit.b0 Bit.b0 Bit.b0 Bit.b0) -- true
+  #eval all_zero (Nybble.bits .b1 .b0 .b1 .b0) -- false
+  #eval all_zero (Nybble.bits .b0 .b0 .b0 .b0) -- true
 end TuplePlayground
 
 -- ## Numbers
@@ -198,19 +210,19 @@ namespace NatPlayground
 
   def pred (n : Nat) : Nat :=
     match n with
-    | Nat.zero => Nat.zero
-    | Nat.succ n' => n'
+    | .zero => .zero
+    | .succ n' => n'
 end NatPlayground
 
-#check Nat.succ (Nat.succ (Nat.succ (Nat.succ Nat.zero))) -- Nat.zero.succ.succ.succ.succ : Nat
+#check Nat.succ (.succ (.succ (.succ .zero))) -- Nat.zero.succ.succ.succ.succ : Nat
 -- NOTE: Lean treats `n.succ` as a `Nat.succ n`
 #check Nat.zero.succ.succ.succ.succ -- Nat.zero.succ.succ.succ.succ : Nat
 
 def minustwo (n : Nat) : Nat :=
   match n with
-  | Nat.zero => Nat.zero
-  | Nat.succ Nat.zero => Nat.zero
-  | Nat.succ (Nat.succ n') => n'
+  | .zero => .zero
+  | .succ .zero => .zero
+  | .succ (.succ n') => n'
 
 #eval minustwo 4 -- 2
 
@@ -220,9 +232,9 @@ def minustwo (n : Nat) : Nat :=
 
 def even (n : Nat) : Bool :=
   match n with
-  | Nat.zero => true
-  | Nat.succ Nat.zero => false
-  | Nat.succ (Nat.succ n') => even n'
+  | .zero => true
+  | .succ .zero => false
+  | .succ (.succ n') => even n'
 
 def odd (n : Nat) : Bool :=
   not (even n)
@@ -233,29 +245,29 @@ example : odd 4 = false := rfl
 namespace NatPlayground2
   def plus (n : Nat) (m : Nat) : Nat :=
     match n with
-    | Nat.zero => m
-    | Nat.succ n' => Nat.succ (plus n' m)
+    | .zero => m
+    | .succ n' => .succ (plus n' m)
 
   #eval plus 3 2 -- 5
 
   def mult (n m : Nat) : Nat :=
     match n with
-    | Nat.zero => Nat.zero
-    | Nat.succ n' => plus m (mult n' m)
+    | .zero => .zero
+    | .succ n' => plus m (mult n' m)
 
   example : mult 3 3 = 9 := rfl
 
   def minus (n m : Nat) : Nat :=
     match n, m with
-    | Nat.zero, _ => Nat.zero
-    | Nat.succ _, Nat.zero => n
-    | Nat.succ n', Nat.succ m' => minus n' m'
+    | .zero, _ => .zero
+    | .succ _, .zero => n
+    | .succ n', .succ m' => minus n' m'
 end NatPlayground2
 
 def exp (base power : Nat) : Nat :=
   match power with
-  | Nat.zero => Nat.succ Nat.zero
-  | Nat.succ p => Nat.mul base (exp base p)
+  | .zero => .succ .zero
+  | .succ p => Nat.mul base (exp base p)
 
 -- ### Exercise: 1 star, standard (factorial)
 def factorial (n : Nat) : Nat :=
@@ -273,22 +285,22 @@ infixl:70 " my* " => Nat.mul
 
 def eqb (n m : Nat) : Bool :=
   match n with
-  | Nat.zero =>
+  | .zero =>
     match m with
-    | Nat.zero => true
-    | Nat.succ _ => false
-  | Nat.succ n' =>
+    | .zero => true
+    | .succ _ => false
+  | .succ n' =>
     match m with
-    | Nat.zero => false
-    | Nat.succ m' => eqb n' m'
+    | .zero => false
+    | .succ m' => eqb n' m'
 
 def leb (n m : Nat) : Bool :=
   match n with
-  | Nat.zero => true
-  | Nat.succ n' =>
+  | .zero => true
+  | .succ n' =>
     match m with
-    | Nat.zero => false
-    | Nat.succ m' => leb n' m'
+    | .zero => false
+    | .succ m' => leb n' m'
 
 example : leb 2 2 = true := rfl
 example : leb 2 4 = true := rfl
