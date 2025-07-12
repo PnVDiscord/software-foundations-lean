@@ -183,7 +183,7 @@ namespace TuplePlayground
     | b1
     | b0
   inductive Nybble : Type where
-    | bits (b0 b1 b2 b3 : Bit)
+    | bits (d0 d1 d2 d3 : Bit)
 
   #check (Nybble.bits .b1 .b0 .b1 .b0 : Nybble)
 
