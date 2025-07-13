@@ -2,7 +2,7 @@ software-foundations-lean
 ========
 Software Foundations rewritten in Lean 4
 
-> [!WARNING]  
+> [!NOTE]
 > This project is still very incomplete.
 
 ```bash
