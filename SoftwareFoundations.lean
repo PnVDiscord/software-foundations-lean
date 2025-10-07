@@ -3,6 +3,7 @@
 
 -- Vol1
 import SoftwareFoundations.Basics
+import SoftwareFoundations.Induction
 
 -- Vol2
 import SoftwareFoundations.Equiv
