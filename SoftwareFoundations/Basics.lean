@@ -86,8 +86,7 @@ def MyBool.toBool (b : MyBool) : Bool :=
 instance : Coe MyBool Bool where coe := MyBool.toBool
 
 def negb' (b : MyBool) : MyBool :=
-  if b
-  then .false
+  if b then .false
   else .true
 
 def andb' (b1 : MyBool) (b2 : MyBool) : MyBool :=
@@ -441,8 +440,12 @@ theorem and_true_elim2 : ∀ b c : Bool, and b c = true → c = true := by
   /- FILL IN HERE -/ sorry
 
 -- ### Exercise: 1 star, standard (zero_nbeq_plus_1)
-theorem zero_nbeq_add_one : ∀ n : Nat, 0 =? n + 1 = false := by
+theorem zero_nbeq_add_one : ∀ n : Nat, (0 =? n + 1) = false := by
   /- FILL IN HERE -/ sorry
+
+-- ## More on Notation (Optional)
+-- NOTE: We'll skip `Exercise: 2 stars, standard, optional (decreasing)`,
+-- as lean fails to show termination for the intended solution (like in Coq).
 
 -- # More Exercises
 
@@ -614,8 +617,8 @@ namespace LateDays
 
   -- ### Exercise: 2 stars, standard (no_penalty_for_mostly_on_time)
   theorem no_penalty_for_mostly_on_time :
-    ∀ (late_days : Nat) (g : Grade), late_days <? 9 = true
-    →
+    ∀ (late_days : Nat) (g : Grade),
+    (late_days <? 9) = true →
     apply_late_policy late_days g = g
   := by
     /- FILL IN HERE -/ sorry
@@ -623,8 +626,8 @@ namespace LateDays
   -- ### Exercise: 2 stars, standard (graded_lowered_once)
   theorem grade_lowered_once :
     ∀ (late_days : Nat) (g : Grade),
-      late_days <? 9 = false →
-      late_days <? 17 = true →
+      (late_days <? 9) = false →
+      (late_days <? 17) = true →
       apply_late_policy late_days g = lower_grade g
   := by
     /- FILL IN HERE -/ sorry
@@ -638,7 +641,6 @@ inductive Bin : Type where
   | b0 (n : Bin)
   | b1 (n : Bin)
 
--- ### Exercise: 3 stars, standard (binary)
 def incr (m : Bin) : Bin :=
   /- REPLACE THIS LINE WITH YOUR DEFINITION -/ sorry
 
