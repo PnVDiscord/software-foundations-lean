@@ -8,7 +8,7 @@ import SoftwareFoundations.Basics
 -- # Proof by Induction
 theorem add_zero_r_firsttry : ∀ n : Nat, n + 0 = n := by
   intro n
-  -- simp: does nothing!
+  -- simp: does nothing! (but, unlike Coq, lean does not fail)
   sorry
 
 theorem add_zero_r_secondtry : ∀ n : Nat, n + 0 = n := by
@@ -16,7 +16,7 @@ theorem add_zero_r_secondtry : ∀ n : Nat, n + 0 = n := by
   match n with
   | .zero => rfl
   | .succ n' =>
-    -- simp: does nothing!
+    -- simp: does nothing! (but, unlike Coq, lean does not fail)
     sorry -- We get stuck here
 
 theorem add_zero_r : ∀ n : Nat, n + 0 = n := by
@@ -142,7 +142,7 @@ theorem bin_to_nat_pres_incr : ∀ b : Bin,
   /- FILL IN HERE -/ sorry
 
 -- ### Exercise: 3 stars, standard (nat_bin_nat)
-def nat_to_bin (n : Nat) : Bin := by
+def nat_to_bin (n : Nat) : Bin :=
   /- FILL IN HERE -/ sorry
 
 theorem nat_bin_nat : ∀ n : Nat, bin_to_nat (nat_to_bin n) = n := by
@@ -176,7 +176,7 @@ theorem double_incr_bin :
 -- that the conversion from bin to nat and back again produces that normalized,
 -- simplest bin.
 -- ### Exercise: 4 stars, advanced (bin_nat_bin)
-def normalize (b : Bin) : Bin := by
+def normalize (b : Bin) : Bin :=
   /- REPLACE THIS LINE WITH YOUR DEFINITION -/ sorry
 
 theorem bin_nat_bin : ∀ b : Bin, nat_to_bin (bin_to_nat b) = normalize b := by
