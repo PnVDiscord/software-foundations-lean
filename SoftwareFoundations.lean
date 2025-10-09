@@ -4,6 +4,7 @@
 -- Vol1
 import SoftwareFoundations.Basics
 import SoftwareFoundations.Induction
+import SoftwareFoundations.Lists
 
 -- Vol2
 import SoftwareFoundations.Equiv
