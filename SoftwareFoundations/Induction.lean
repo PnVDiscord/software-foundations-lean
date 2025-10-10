@@ -167,7 +167,7 @@ theorem double_incr : ∀ n : Nat, double (.succ n) = .succ (.succ (double n)) :
 def double_bin (b : Bin) : Bin :=
   /- REPLACE THIS LINE WITH YOUR DEFINITION -/ sorry
 
-example : double_bin z = z := by
+example {z': Bin} : double_bin z' = z' := by
   /- FILL IN HERE -/ sorry
 
 theorem double_incr_bin :
