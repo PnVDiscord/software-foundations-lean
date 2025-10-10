@@ -75,7 +75,7 @@ example : .false my|| .false my|| .true = .true := rfl
 
 -- Unlike in Coq, Lean4 does not treat first clause constructors as a truthy
 -- value. So we need to define our own coercion from `MyBool` to `Bool` to
--- allow using `if` statements with `MyBool` values.
+-- allow using `if` expressions with `MyBool` values.
 @[coe]
 def MyBool.toBool (b : MyBool) : Bool :=
   match b with
@@ -102,7 +102,7 @@ inductive BW : Type where
   | white
 
 -- Unlike the original software foundations book,
--- let's not abuse the `if` statement as a binary pattern matching.
+-- let's not abuse the `if` expression as a binary pattern match construct.
 def invert (x: BW) : BW :=
   match x with
   | .black => .white
@@ -112,7 +112,7 @@ def invert (x: BW) : BW :=
 #eval invert .white -- BW.black
 
 -- ### Exercise: 1 star, standard (nandb)
--- TODO: Replace `sorry` with your definition.
+-- TODO: Replace `sorry` with your definitions.
 def nandb (b1 b2 : MyBool) : MyBool :=
   /- REPLACE THIS LINE WITH YOUR DEFINITION -/ sorry
 example : (nandb .true .false) = true :=
