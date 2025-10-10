@@ -78,12 +78,20 @@ theorem plus_rearrange_firsttry :
   rewrite [add_comm] -- Lean rewrites the wrong plus!
   sorry
 
+theorem plus_rearrange_secondtry :
+  ∀ n m p q : Nat,
+  (n + m) + (p + q) = (m + n) + (p + q)
+:= by
+  intro n m p q
+  rewrite [add_comm n m] -- You can specify which term!
+  rfl
+
 theorem plus_rearrange :
   ∀ n m p q : Nat,
   (n + m) + (p + q) = (m + n) + (p + q)
 := by
   intro n m p q
-  have h : n + m = m + n := by
+  have h : n + m = m + n := by -- Or declare an intermediate proof term
     rewrite [add_comm] <;> rfl
   rewrite [h]
   rfl
