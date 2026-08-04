@@ -1,9 +1,12 @@
+> Obsoleted by [plclub/sf-in-lean](https://github.com/plclub/sf-in-lean)
+> --------
+> See <https://github.com/plclub/sf-in-lean> instead
+
+&nbsp;
+
 software-foundations-lean
 ========
-Software Foundations rewritten in Lean 4
-
-> [!NOTE]
-> This project is still very incomplete.
+Software Foundations rewritten in Lean 4, WIP
 
 ```bash
 lake build
